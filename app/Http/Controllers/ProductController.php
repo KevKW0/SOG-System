@@ -18,7 +18,6 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $categories = Categories::all()->pluck('category_name', 'id');
         return view('product.index', [
             'categories' => Categories::all()
         ]);
@@ -28,7 +27,6 @@ class ProductController extends Controller
     {
         $product = Products::leftJoin('category', 'category.id', 'product.id_category')
             ->select('product.*', 'category_name')
-            ->orderBy('id', 'desc')
             ->get();
 
         return $dataTables
@@ -49,7 +47,7 @@ class ProductController extends Controller
                 return money_format($product->selling_price);
             })
             ->addColumn('stock', function ($product) {
-                return money_format($product->stock);
+                return $product->stock;
             })
             ->addColumn('action', function ($product) {
                 return '
@@ -166,4 +164,3 @@ class ProductController extends Controller
         return $pdf->stream('Product.pdf');
     }
 }
- 
